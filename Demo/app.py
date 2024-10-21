@@ -70,12 +70,27 @@ with st.sidebar:
     )
 
     if selected == "Licensing Module":
-        section = st.selectbox("Select Section", ["Dashboard", "Model"])
+        section = st.selectbox("Select Section", ["Dashboard", "Licensing Decision Predictor"])
 
 # Main content based on sidebar selection
 if selected == "Home":
     st.title("🏠 Home")
-    st.write("Welcome to the Home page.")
+    st.title("Welcome to the Licensing Tool for Regulators")
+
+    st.markdown(
+    """
+    <div style="background-color: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px solid #ddd; max-width: 800px; margin: 0 auto;">
+    <h3>How to Use This Tool</h3>
+    <p>The Licensing Module in this tool is designed to help regulators with the licensing decision process.</p>
+    <ul>
+        <li><b>Dashboard</b>: Use the dashboard to view high-level metrics and insights related to the licensing process. This section provides an overview of trends and statistics that can help in monitoring and decision-making.</li>
+        <li><b>Licensing Decision Predictor</b>: Use this section to predict the outcome of licensing decisions. You can input various data points to get a prediction, and view the reasoning analysis done by the LLM (Large Language Model) to understand the basis for the decision. Additionally, you can see recommendations based on the predicted results, which can assist in making informed regulatory decisions.</li>
+    </ul>
+    </div>
+    """, 
+    unsafe_allow_html=True
+    )
+  
     
 elif selected == "Licensing Module":
     # Display a greeting message and today's date
