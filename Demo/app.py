@@ -27,8 +27,8 @@ df = df.dropna(subset=['Application_Date'])
 
 #################### Load Model #######################
 # with open('rf_model.pkl', 'rb') as file:
-# Set the path to the random forest model (since it's in the same directory)
-model_path = os.path.join(os.path.dirname(__file__), 'Demo/models/rf_model.pkl')
+# Set the path to the random forest model
+model_path = os.path.join(os.path.dirname(__file__), 'models/rf_model.pkl')
 
 # Initialize model handler and load the model
 model_handler = ModelHandler()
