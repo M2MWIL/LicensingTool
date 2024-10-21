@@ -16,9 +16,9 @@ import requests
 
 #################### Load Data #######################
 
-df = pd.read_csv('AGCOdataset.csv')
+df = pd.read_csv('Demo/AGCOdataset.csv')
 
-map_data= pd.read_csv('map.csv')
+map_data= pd.read_csv('Demo/map.csv')
 
 # Convert 'Application_Date' to datetime format, handling errors
 df['Application_Date'] = pd.to_datetime(df['Application_Date'], errors='coerce')
