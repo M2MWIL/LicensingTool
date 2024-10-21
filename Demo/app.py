@@ -16,9 +16,9 @@ import requests
 
 #################### Load Data #######################
 
-df = pd.read_csv('Demo/AGCOdataset.csv')
+df = pd.read_csv('AGCOdataset.csv')
 
-map_data= pd.read_csv('Demo/map.csv')
+map_data= pd.read_csv('map.csv')
 
 # Convert 'Application_Date' to datetime format, handling errors
 df['Application_Date'] = pd.to_datetime(df['Application_Date'], errors='coerce')
@@ -69,8 +69,7 @@ with st.sidebar:
         default_index=0
     )
 
-    if selected == "Licensing Module":
-        section = st.selectbox("Select Section", ["Dashboard", "Licensing Decision Predictor"])
+    
 
 # Main content based on sidebar selection
 if selected == "Home":
@@ -93,6 +92,14 @@ if selected == "Home":
   
     
 elif selected == "Licensing Module":
+    with st.sidebar:
+        section = option_menu(
+            "Options", 
+            ["Dashboard", "Licensing Decision Predictor"],
+            icons=["bar-chart", "activity"],  # You can replace these with relevant icons
+            menu_icon="list", 
+            default_index=0
+        )
     # Display a greeting message and today's date
     st.write(f"Date: {today}")
     st.title(f"{greeting}, Welcome to the Licensing Module!")
