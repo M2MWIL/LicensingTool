@@ -22,6 +22,8 @@ class LLMHandler():
         Explain why the Random Forest model predicted the risk classification of '{prediction}' for this sample. With reference to what you see
         in the raw table entry
         Please explain why this classification is appropriate or inapropriate based on the provided data.
+        If the risk classification is 'Moderate', the application will be a conditional approval. Please explain in detail what conditions the 
+        applicant must follow with their conditional approval
 
         """
         response = self.model.invoke(prompt)

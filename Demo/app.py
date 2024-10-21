@@ -11,6 +11,7 @@ from data_processing import DataProcessor  # Import DataProcessor from data_proc
 from models import ModelHandler  # Import ModelHandler from models.py
 #from llm import LLMHandler  # Import LLMHandler from llm.py
 from streamlit_option_menu import option_menu
+import requests
 
 
 #################### Load Data #######################
@@ -290,23 +291,29 @@ elif selected == "Licensing Module":
             # Add more fields depending on the input requirements
         }
 
+    
         
-        # Convert the input to a DataFrame
-        input_df = pd.DataFrame([input_data])
-        input_df = input_df[expected_features]
-
-
-        # Preprocess input data using DataProcessor
-        input_df = data_processor.apply_weights(input_df)
-        input_df = data_processor.encode_columns(input_df)
 
         # Prediction
         if st.button('Predict'):
-            prediction = model_handler.predict(input_df)
-            st.write(f"The predicted risk classification is: {prediction[0]}")
+            data = {
+                "features": [input_data]  # Send as a list of dictionaries
+            }
+            api_url = "http://127.0.0.1:5000/predict"
+            try:
+                res = requests.post(api_url, json=data)
+                response_data = res.json()
+                st.subheader("Prediction Results")
+                for result in response_data:
+                    st.write(f"Predicted Risk Classification: {result['Predicted_Risk_Classification']}")
+                    st.write(f"Application Result: {result['Application_Result']}")
+                    st.write(f"Explanation: {result['Explanation']}")
+                    st.write("---")
+            except Exception as e:
+                st.error(f"Error occurred: {e}")
 
-            # Optionally, use the LLMHandler to generate an explanation
-            llm_handler = LLMHandler()
-            explanation = llm_handler.generate_explanation("Decision path not available", prediction[0], input_data)
-            st.write("LLM Explanation of the prediction:")
-            st.write(explanation)
+
+            
+            
+
+            
