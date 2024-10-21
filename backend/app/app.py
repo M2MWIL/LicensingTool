@@ -3,15 +3,16 @@ import pandas as pd
 import pickle
 from llm import LLMHandler
 import os
+from data_processing import DataProcessor
 
-
-with open('model/random_forest_model.pickle', 'rb') as model_file:
+with open('models/random_forest_model.pickle', 'rb') as model_file:
     rf_model = pickle.load(model_file)
 
 app = Flask(__name__)
 
 # Initialize LLM handler
 llm_handler = LLMHandler()
+processor = DataProcessor()
 
 # Helper function to extract decision path
 def extract_decision_path_for_prediction(sample_data, rf_model, trees):
@@ -42,6 +43,9 @@ def predict():
 
         # Filter columns according to the trained model's columns
         df_test_filtered = test_data[rf_model.feature_names_in_]
+
+        df_test_filtered = processor.apply_weights(df_test_filtered)
+        df_test_filtered = processor.encode_columns(df_test_filtered)
 
         # Make predictions
         y_test_pred = rf_model.predict(df_test_filtered)

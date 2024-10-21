@@ -3,9 +3,13 @@ from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 import os
 from langchain_core.output_parsers import StrOutputParser
+from config import Config 
+
 class LLMHandler():
     def __init__(self):
-        self.api_key = os.getenv('OPENAI_API_KEY')
+        self.api_key = Config.OPENAI_API_KEY
+        if not self.api_key:
+            raise ValueError("OpenAI API key not found. Make sure it's set in the environment.")
         self.model= ChatOpenAI(model="gpt-4o-mini", openai_api_key=self.api_key)
     def generate_explanation(self, decision_path, prediction, data):
         prompt = f"""
@@ -20,6 +24,6 @@ class LLMHandler():
         Please explain why this classification is appropriate or inapropriate based on the provided data.
 
         """
-        response = (self.model | StrOutputParser).invoke(prompt)
+        response = self.model.invoke(prompt)
         
         return response.content
