@@ -299,7 +299,7 @@ elif selected == "Licensing Module":
             data = {
                 "features": [input_data]  # Send as a list of dictionaries
             }
-            api_url = "http://127.0.0.1:5000/predict"
+            api_url = "https://flask-api-regulatory-7f5479effcc5.herokuapp.com/predict"
             try:
                 res = requests.post(api_url, json=data)
                 response_data = res.json()
