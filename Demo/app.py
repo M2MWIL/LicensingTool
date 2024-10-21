@@ -267,7 +267,7 @@ elif selected == "Licensing Module":
         st.header("Licensing Application Directory")
         st.dataframe(df)  
         
-    elif section == "Model":
+    elif section == "Licensing Decision Predictor":
         st.title("Licensing Risk Prediction")
         expected_features = model_handler.model.feature_names_in_
 
