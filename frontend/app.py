@@ -27,7 +27,7 @@ df = df.dropna(subset=['Application_Date'])
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Create the full path to the 'rf_model.pkl' file
-model_path = os.path.join(current_dir, 'rf_model.pk
+model_path = os.path.join(current_dir, 'rf_model.pkl')
 # with open('rf_model.pkl', 'rb') as file:
 #     loaded_model = pickle.load(file)
 
