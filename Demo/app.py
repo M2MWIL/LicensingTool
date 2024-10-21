@@ -15,9 +15,9 @@ from streamlit_option_menu import option_menu
 
 #################### Load Data #######################
 
-df = pd.read_csv('demo/AGCOdataset.csv')
+df = pd.read_csv('Demo/AGCOdataset.csv')
 
-map_data= pd.read_csv('demo/map.csv')
+map_data= pd.read_csv('Demo/map.csv')
 
 # Convert 'Application_Date' to datetime format, handling errors
 df['Application_Date'] = pd.to_datetime(df['Application_Date'], errors='coerce')
@@ -28,7 +28,7 @@ df = df.dropna(subset=['Application_Date'])
 #################### Load Model #######################
 # with open('rf_model.pkl', 'rb') as file:
 # Set the path to the random forest model (since it's in the same directory)
-model_path = os.path.join(os.path.dirname(__file__), 'demo/rf_model.pkl')
+model_path = os.path.join(os.path.dirname(__file__), 'Demo/rf_model.pkl')
 
 # Initialize model handler and load the model
 model_handler = ModelHandler()
