@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -22,8 +23,14 @@ df['Application_Date'] = pd.to_datetime(df['Application_Date'], errors='coerce')
 df = df.dropna(subset=['Application_Date'])
 
 #################### Load Model #######################
+# Get the directory of the current script (app.py)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Create the full path to the 'rf_model.pkl' file
+model_path = os.path.join(current_dir, 'rf_model.pk
 # with open('rf_model.pkl', 'rb') as file:
 #     loaded_model = pickle.load(file)
+
 
 #################### Streamlit Layout #######################
 
