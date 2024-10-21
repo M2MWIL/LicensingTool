@@ -267,7 +267,7 @@ elif selected == "Licensing Module":
             'Application_Status'
         ])
         
-        with open('rf_model.pkl', 'rb') as file:
+        with open('frontend/rf_model.pkl', 'rb') as file:
             loaded_model = pickle.load(file)
 
         if st.button('Predict'):
