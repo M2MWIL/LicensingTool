@@ -12,9 +12,8 @@ from model import return_model
 
 #################### Load Data #######################
 
-df = pd.read_csv('AGCOdataset.csv')
-
-map_data= pd.read_csv('map.csv')
+df = pd.read_csv('frontend/AGCOdataset.csv')
+map_data= pd.read_csv('frontend/map.csv')
 
 # Convert 'Application_Date' to datetime format, handling errors
 df['Application_Date'] = pd.to_datetime(df['Application_Date'], errors='coerce')
