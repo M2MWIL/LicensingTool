@@ -22,4 +22,4 @@ class LLMHandler():
         """
         response = (self.model | StrOutputParser).invoke(prompt)
         
-        return response
+        return response.content

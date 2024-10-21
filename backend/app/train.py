@@ -9,9 +9,9 @@ def main():
     # Define your features and labels
     X = file_shortened[['Premises_Type', 'Applicant_Type', 'Area_Type', 'Previous_Licenses_Held',
                'Compliance_History', 'Tax_Compliance_Status', 'Premises_Ownership', 'Business_Longevity',
-               'Licensed_Areas', 'Automated_Liquor_Dispensers', 'Lineups_on_Public_Property', 'Ancillary_Areas',
+               'Licensed_Areas', 'Lineups_on_Public_Property',
                'Proximity_to_Residential_Area', 'Proximity_to_School', 'Fire_Safety_Certificate',
-               'Municipal_Approval', 'Application_Status']]
+               'Municipal_Approval']]
     y = file_shortened['Risk_Classification']
 
     # Initialize the processor and model handler
@@ -19,6 +19,7 @@ def main():
     model_handler = ModelHandler()
 
     # Preprocess the data
+    
     X = processor.apply_weights(X)
     X = processor.encode_columns(X)
 

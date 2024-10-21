@@ -68,8 +68,8 @@ class DataProcessor:
         # Columns that need label encoding
         self.columns_to_encode = [
             'Applicant_Type', 'Area_Type', 'Premises_Ownership', 'Business_Longevity',
-            'Licensed_Areas', 'Automated_Liquor_Dispensers', 'Lineups_on_Public_Property', 
-            'Ancillary_Areas', 'Application_Status'
+            'Licensed_Areas', 'Lineups_on_Public_Property', 
+            
         ]
         self.label_encoder = LabelEncoder()
 
