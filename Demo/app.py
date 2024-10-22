@@ -276,70 +276,74 @@ elif selected == "Licensing Module":
         
     elif section == "Licensing Decision Predictor":
         st.title("Licensing Risk Prediction")
+        col1, col2 = st.columns([1, 3])
         expected_features = model_handler.model.feature_names_in_
 
 
         # Collect input data from user
-        input_data = {
-            'Applicant_Type': st.selectbox('Applicant Type', ['Individual', 'Company', 'Partnership']),
-            'Area_Type': st.selectbox('Area Type', ['Urban', 'Rural']),
-            'Premises_Ownership': st.selectbox('Premises Ownership', ['Owned', 'Rented']),
-            'Business_Longevity': st.slider('Business Longevity (in years)', 0, 20, 2),
-            'Licensed_Areas': st.slider('Number of Licensed Areas', 1, 10, 2),
-            'Automated_Liquor_Dispensers': st.selectbox('Automated Liquor Dispensers', ['Yes', 'No']),
-            'Lineups_on_Public_Property': st.selectbox('Lineups on Public Property', ['Yes', 'No']),
-            'Ancillary_Areas': st.selectbox('Ancillary Areas', ['Yes', 'No']),
-            'Application_Status': st.selectbox('Application Status', ['Pending', 'Approved', 'Rejected']),
-            'Compliance_History': st.selectbox('Compliance History', ['Minor', 'Multiple', 'Severe']),  
-            'Tax_Compliance_Status': st.selectbox('Tax Compliance Status', ['Compliant', 'Non-Compliant']), 
-            'Premises_Type': st.selectbox('Premises Type', [
-            'Adult Entertainment', 'Arcade-style Facility', 'Art Gallery', 'Athletic Club', 
-            'Auditorium', 'Automotive / Marina', 'Banquet Hall', 'Bar / Sports Bar', 
-            'Big Box Retail Store', 'Billiard / Pool Hall', 'Bingo Hall', 'Bookstore', 
-            'Bowling Alley', 'Community Centre', 'Convenient Store', 
-            'Educational Facility-Over 19 yrs of age', 'Funeral Home', 'General Store', 
-            'Golf Course', 'Grocery Store', 'Hair Salon / Barber Shop', 
-            'Historical Site / Landmark', 'Hotel / Motel', 'Internet Cafe', 
-            'Karaoke Bar / Restaurant', 'Laundromat', 'Live Theatre', 'Medical Facility', 
-            'Military', 'Motion Picture Theatre', 'Museum', 'Night Club', 'Other', 
-            'Railway Car', 'Restaurant (Franchise)', 'Restaurant / Bar', 
-            'Retirement Residence', 'Social Club', 'Spa', 'Speciality Food Store', 
-            'Specialty Merchandise Store', 'Stadium', 'Train']),
-            'Previous_Licenses_Held': st.selectbox('Previous Licenses Held', ['Yes', 'No']),
-            'Proximity_to_Residential_Area': st.selectbox('Proximity to Residential Area', ['Yes', 'No']),
-            'Proximity_to_School': st.selectbox('Proximity to School', ['Yes', 'No']),
-            'Fire_Safety_Certificate': st.selectbox('Fire Safety Certificate', ['Valid', 'Expired']),
-            'Municipal_Approval': st.selectbox('Municipal Approval', ['Approved', 'Pending']),
-            # Add more fields depending on the input requirements
-        }
+        with col1:
+            input_data = {
+                'Applicant_Type': st.selectbox('Applicant Type', ['Individual', 'Company', 'Partnership']),
+                'Area_Type': st.selectbox('Area Type', ['Urban', 'Rural']),
+                'Premises_Ownership': st.selectbox('Premises Ownership', ['Owned', 'Rented']),
+                'Business_Longevity': st.slider('Business Longevity (in years)', 0, 20, 2),
+                'Licensed_Areas': st.slider('Number of Licensed Areas', 1, 10, 2),
+                'Automated_Liquor_Dispensers': st.selectbox('Automated Liquor Dispensers', ['Yes', 'No']),
+                'Lineups_on_Public_Property': st.selectbox('Lineups on Public Property', ['Yes', 'No']),
+                'Ancillary_Areas': st.selectbox('Ancillary Areas', ['Yes', 'No']),
+                'Application_Status': st.selectbox('Application Status', ['Pending', 'Approved', 'Rejected']),
+                'Compliance_History': st.selectbox('Compliance History', ['Minor', 'Multiple', 'Severe']),  
+                'Tax_Compliance_Status': st.selectbox('Tax Compliance Status', ['Compliant', 'Non-Compliant']), 
+                'Premises_Type': st.selectbox('Premises Type', [
+                'Adult Entertainment', 'Arcade-style Facility', 'Art Gallery', 'Athletic Club', 
+                'Auditorium', 'Automotive / Marina', 'Banquet Hall', 'Bar / Sports Bar', 
+                'Big Box Retail Store', 'Billiard / Pool Hall', 'Bingo Hall', 'Bookstore', 
+                'Bowling Alley', 'Community Centre', 'Convenient Store', 
+                'Educational Facility-Over 19 yrs of age', 'Funeral Home', 'General Store', 
+                'Golf Course', 'Grocery Store', 'Hair Salon / Barber Shop', 
+                'Historical Site / Landmark', 'Hotel / Motel', 'Internet Cafe', 
+                'Karaoke Bar / Restaurant', 'Laundromat', 'Live Theatre', 'Medical Facility', 
+                'Military', 'Motion Picture Theatre', 'Museum', 'Night Club', 'Other', 
+                'Railway Car', 'Restaurant (Franchise)', 'Restaurant / Bar', 
+                'Retirement Residence', 'Social Club', 'Spa', 'Speciality Food Store', 
+                'Specialty Merchandise Store', 'Stadium', 'Train']),
+                'Previous_Licenses_Held': st.selectbox('Previous Licenses Held', ['Yes', 'No']),
+                'Proximity_to_Residential_Area': st.selectbox('Proximity to Residential Area', ['Yes', 'No']),
+                'Proximity_to_School': st.selectbox('Proximity to School', ['Yes', 'No']),
+                'Fire_Safety_Certificate': st.selectbox('Fire Safety Certificate', ['Valid', 'Expired']),
+                'Municipal_Approval': st.selectbox('Municipal Approval', ['Approved', 'Pending']),
+                # Add more fields depending on the input requirements
+            }
 
     
         
 
         # Prediction
-        if st.button('Predict'):
-            data = {
-                "features": [input_data]  # Send as a list of dictionaries
-            }
-            api_url = "https://flask-api-regulatory-7f5479effcc5.herokuapp.com/predict"
-            try:
-                res = requests.post(api_url, json=data)
-                response_data = res.json()
-                st.subheader("Prediction Results")
-                for result in response_data:
-                    risk_classification  = result['Predicted_Risk_Classification']
-                    if risk_classification == 'Low':
-                        st.success(f"Predicted Risk Classification: {risk_classification}")
-                    elif risk_classification == 'Moderate':
-                        st.warning(f"Predicted Risk Classification: {risk_classification}")
-                    else:
-                        st.error(f"Predicited Risk Classification: {risk_classification}")
-                    st.markdown(f"**Application Result:** {result['Application_Result']}")
-                    with st.expander("Show Explanation"):
-                        st.write(f"Explanation: {result['Explanation']}")
-                    st.write("---")
-            except Exception as e:
-                st.error(f"Error occurred: {e}")
+        with col2:
+            st.header("Prediction Results")
+            if st.button('Predict'):
+                data = {
+                    "features": [input_data]  # Send as a list of dictionaries
+                }
+                api_url = "https://flask-api-regulatory-7f5479effcc5.herokuapp.com/predict"
+                try:
+                    res = requests.post(api_url, json=data)
+                    response_data = res.json()
+                    st.subheader("Prediction Results")
+                    for result in response_data:
+                        risk_classification  = result['Predicted_Risk_Classification']
+                        if risk_classification == 'Low':
+                            st.success(f"Predicted Risk Classification: {risk_classification}")
+                        elif risk_classification == 'Moderate':
+                            st.warning(f"Predicted Risk Classification: {risk_classification}")
+                        else:
+                            st.error(f"Predicited Risk Classification: {risk_classification}")
+                        st.markdown(f"**Application Result:** {result['Application_Result']}")
+                        with st.expander("Show Explanation"):
+                            st.write(f"Explanation: {result['Explanation']}")
+                        st.write("---")
+                except Exception as e:
+                    st.error(f"Error occurred: {e}")
 
 
             

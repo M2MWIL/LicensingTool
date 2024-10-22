@@ -21,7 +21,7 @@ class ModelHandler:
         'Importance': importances
         }).sort_values(by='Importance', ascending=False)
         print(feature_importances)
-        return self.model, accuracy, report
+        return self.model, feature_importances, accuracy, report
 
     def predict(self, X_test):
         return self.model.predict(X_test)
