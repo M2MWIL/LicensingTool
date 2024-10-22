@@ -276,12 +276,25 @@ elif selected == "Licensing Module":
         
     elif section == "Licensing Decision Predictor":
         st.title("Licensing Risk Prediction")
+        st.markdown("""
+        <style>
+            .custom-container {
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 15px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                background-color: #f9f9f9;
+            }
+        </style>
+        """, unsafe_allow_html=True)
         col1, col2 = st.columns([1, 3])
         expected_features = model_handler.model.feature_names_in_
 
 
         # Collect input data from user
         with col1:
+            st.markdown('<div class="custom-container">', unsafe_allow_html=True)
+            st.header("Input Fields")
             input_data = {
                 'Applicant_Type': st.selectbox('Applicant Type', ['Individual', 'Company', 'Partnership']),
                 'Area_Type': st.selectbox('Area Type', ['Urban', 'Rural']),
@@ -320,6 +333,7 @@ elif selected == "Licensing Module":
 
         # Prediction
         with col2:
+            st.markdown('<div class="custom-container">', unsafe_allow_html=True)
             st.header("Prediction Results")
             if st.button('Predict'):
                 data = {
