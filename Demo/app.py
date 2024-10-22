@@ -327,6 +327,7 @@ elif selected == "Licensing Module":
                 'Municipal_Approval': st.selectbox('Municipal Approval', ['Approved', 'Pending']),
                 # Add more fields depending on the input requirements
             }
+            st.markdown('</div>', unsafe_allow_html=True)
 
     
         
@@ -358,6 +359,7 @@ elif selected == "Licensing Module":
                         st.write("---")
                 except Exception as e:
                     st.error(f"Error occurred: {e}")
+            st.markdown('</div>', unsafe_allow_html=True)
 
 
             
