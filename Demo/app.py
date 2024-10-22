@@ -207,17 +207,53 @@ elif selected == "Licensing Module":
             st.plotly_chart(fig_renewal, use_container_width=True)
         
         # Add two columns for other charts (Feature importance AND approval by premises type)
-        col6, col7 = st.columns([3,1])   
-        with col6:
-            st.write("#### Licensing Decision by Premises Type") 
-            stacked_data = df.groupby(['Licensing_Decision', 'Premises_Type']).size().reset_index(name='Counts')
-            stacked_fig = px.bar(stacked_data, x='Premises_Type', y='Counts', color='Licensing_Decision',
+         
+       
+        st.write("#### Licensing Decision by Premises Type") 
+        stacked_data = df.groupby(['Licensing_Decision', 'Premises_Type']).size().reset_index(name='Counts')
+        stacked_fig = px.bar(stacked_data, x='Premises_Type', y='Counts', color='Licensing_Decision',
                                 title='Licensing Decision by Premises Type', barmode='stack')
-            st.plotly_chart(stacked_fig)
+        st.plotly_chart(stacked_fig)
         
-        with col7:
-            st.write("#### Feature Importance") 
-        # Add two columns for other charts (Risk by Region and Volume Trends)
+        st.write("#### Feature Importance")
+        # Data
+        datafi = {
+           'Feature': [
+               'Proximity_to_Residential_Area', 'Premises_Ownership', 'Municipal_Approval', 
+                'Tax_Compliance_Status', 'Proximity_to_School', 'Premises_Type', 
+                'Compliance_History', 'Area_Type', 'Fire_Safety_Certificate', 
+                'Lineups_on_Public_Property', 'Business_Longevity', 'Licensed_Areas', 
+                'Applicant_Type', 'Previous_Licenses_Held'
+            ],
+            'Importance': [
+                0.164621, 0.157167, 0.096508, 0.095660, 0.086620, 0.074360, 0.074295, 
+                0.073622, 0.065535, 0.039895, 0.031250, 0.029291, 0.005958, 0.005216
+            ]
+        }
+
+        # Create DataFrame
+        df = pd.DataFrame(datafi)
+
+        # Waterfall chart using Plotly
+        fig = go.Figure(go.Waterfall(
+            name = "Feature Importance",
+            orientation = "v",
+            x = df['Feature'],
+            y = df['Importance'],
+            decreasing = {"marker":{"color":"red"}},
+            increasing = {"marker":{"color":"green"}},
+            totals = {"marker":{"color":"blue"}}
+        ))
+
+        # Add chart title and layout
+        fig.update_layout(
+            title = "Feature Importance Waterfall Chart",
+            waterfallgap = 0.2,
+            showlegend = True
+        )
+
+        # Display the chart in Streamlit
+        st.plotly_chart(fig)
         col8, col9 = st.columns(2)
         
         # Location Hotspot: Risk by Region (col4)
@@ -276,11 +312,13 @@ elif selected == "Licensing Module":
         
     elif section == "Licensing Decision Predictor":
         st.title("Licensing Risk Prediction")
+        
+        # Custom CSS for styling the borders and the container
         st.markdown("""
         <style>
             .custom-container {
                 padding: 20px;
-                border: 1px solid #ccc;
+                border: 2px solid #ccc;
                 border-radius: 15px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 background-color: #f9f9f9;
@@ -294,28 +332,29 @@ elif selected == "Licensing Module":
             }
         </style>
         """, unsafe_allow_html=True)
+        
+        # Create columns with 1:3 ratio
         col1, col2 = st.columns([1, 3])
-        expected_features = model_handler.model.feature_names_in_
 
-
-        # Collect input data from user
+        # Left column: Input Fields
         with col1:
-            with st.container():
-                st.markdown('<div class="custom-container centered">', unsafe_allow_html=True)
-                st.header("Input Fields")
-                input_data = {
-                    'Applicant_Type': st.selectbox('Applicant Type', ['Individual', 'Company', 'Partnership']),
-                    'Area_Type': st.selectbox('Area Type', ['Urban', 'Rural']),
-                    'Premises_Ownership': st.selectbox('Premises Ownership', ['Owned', 'Rented']),
-                    'Business_Longevity': st.slider('Business Longevity (in years)', 0, 20, 2),
-                    'Licensed_Areas': st.slider('Number of Licensed Areas', 1, 10, 2),
-                    'Automated_Liquor_Dispensers': st.selectbox('Automated Liquor Dispensers', ['Yes', 'No']),
-                    'Lineups_on_Public_Property': st.selectbox('Lineups on Public Property', ['Yes', 'No']),
-                    'Ancillary_Areas': st.selectbox('Ancillary Areas', ['Yes', 'No']),
-                    'Application_Status': st.selectbox('Application Status', ['Pending', 'Approved', 'Rejected']),
-                    'Compliance_History': st.selectbox('Compliance History', ['Minor', 'Multiple', 'Severe']),  
-                    'Tax_Compliance_Status': st.selectbox('Tax Compliance Status', ['Compliant', 'Non-Compliant']), 
-                    'Premises_Type': st.selectbox('Premises Type', [
+            st.markdown('<div class="custom-container centered">', unsafe_allow_html=True)
+            st.header("Input Fields")
+            
+            # Collect input data from user
+            input_data = {
+                'Applicant_Type': st.selectbox('Applicant Type', ['Individual', 'Company', 'Partnership']),
+                'Area_Type': st.selectbox('Area Type', ['Urban', 'Rural']),
+                'Premises_Ownership': st.selectbox('Premises Ownership', ['Owned', 'Rented']),
+                'Business_Longevity': st.slider('Business Longevity (in years)', 0, 20, 2),
+                'Licensed_Areas': st.slider('Number of Licensed Areas', 1, 10, 2),
+                'Automated_Liquor_Dispensers': st.selectbox('Automated Liquor Dispensers', ['Yes', 'No']),
+                'Lineups_on_Public_Property': st.selectbox('Lineups on Public Property', ['Yes', 'No']),
+                'Ancillary_Areas': st.selectbox('Ancillary Areas', ['Yes', 'No']),
+                'Application_Status': st.selectbox('Application Status', ['Pending', 'Approved', 'Rejected']),
+                'Compliance_History': st.selectbox('Compliance History', ['Minor', 'Multiple', 'Severe']),  
+                'Tax_Compliance_Status': st.selectbox('Tax Compliance Status', ['Compliant', 'Non-Compliant']), 
+                'Premises_Type': st.selectbox('Premises Type', [
                     'Adult Entertainment', 'Arcade-style Facility', 'Art Gallery', 'Athletic Club', 
                     'Auditorium', 'Automotive / Marina', 'Banquet Hall', 'Bar / Sports Bar', 
                     'Big Box Retail Store', 'Billiard / Pool Hall', 'Bingo Hall', 'Bookstore', 
@@ -327,51 +366,45 @@ elif selected == "Licensing Module":
                     'Military', 'Motion Picture Theatre', 'Museum', 'Night Club', 'Other', 
                     'Railway Car', 'Restaurant (Franchise)', 'Restaurant / Bar', 
                     'Retirement Residence', 'Social Club', 'Spa', 'Speciality Food Store', 
-                    'Specialty Merchandise Store', 'Stadium', 'Train']),
-                    'Previous_Licenses_Held': st.selectbox('Previous Licenses Held', ['Yes', 'No']),
-                    'Proximity_to_Residential_Area': st.selectbox('Proximity to Residential Area', ['Yes', 'No']),
-                    'Proximity_to_School': st.selectbox('Proximity to School', ['Yes', 'No']),
-                    'Fire_Safety_Certificate': st.selectbox('Fire Safety Certificate', ['Valid', 'Expired']),
-                    'Municipal_Approval': st.selectbox('Municipal Approval', ['Approved', 'Pending']),
-                    # Add more fields depending on the input requirements
-                }
-                st.markdown('</div>', unsafe_allow_html=True)
+                    'Specialty Merchandise Store', 'Stadium', 'Train'
+                ]),
+                'Previous_Licenses_Held': st.selectbox('Previous Licenses Held', ['Yes', 'No']),
+                'Proximity_to_Residential_Area': st.selectbox('Proximity to Residential Area', ['Yes', 'No']),
+                'Proximity_to_School': st.selectbox('Proximity to School', ['Yes', 'No']),
+                'Fire_Safety_Certificate': st.selectbox('Fire Safety Certificate', ['Valid', 'Expired']),
+                'Municipal_Approval': st.selectbox('Municipal Approval', ['Approved', 'Pending'])
+            }
+            st.markdown('</div>', unsafe_allow_html=True)
 
-    
-        
-
-        # Prediction
+        # Right column: Prediction results
         with col2:
-            with st.container():
-                st.markdown('<div class="custom-container centered">', unsafe_allow_html=True)
-                st.header("Prediction Results")
-                if st.button('Predict'):
-                    data = {
-                        "features": [input_data]  # Send as a list of dictionaries
-                    }
-                    api_url = "https://flask-api-regulatory-7f5479effcc5.herokuapp.com/predict"
-                    try:
-                        res = requests.post(api_url, json=data)
-                        response_data = res.json()
-                        st.subheader("Prediction Results")
-                        for result in response_data:
-                            risk_classification  = result['Predicted_Risk_Classification']
-                            if risk_classification == 'Low':
-                                st.success(f"Predicted Risk Classification: {risk_classification}")
-                            elif risk_classification == 'Moderate':
-                                st.warning(f"Predicted Risk Classification: {risk_classification}")
-                            else:
-                                st.error(f"Predicited Risk Classification: {risk_classification}")
-                            st.markdown(f"**Application Result:** {result['Application_Result']}")
-                            with st.expander("Show Explanation"):
-                                st.write(f"Explanation: {result['Explanation']}")
-                            st.write("---")
-                    except Exception as e:
-                        st.error(f"Error occurred: {e}")
-                st.markdown('</div>', unsafe_allow_html=True)
-
-
+            st.markdown('<div class="custom-container centered">', unsafe_allow_html=True)
+            st.header("Prediction Results")
             
-            
-
-            
+            if st.button('Predict'):
+                data = {
+                    "features": [input_data]  # Send as a list of dictionaries
+                }
+                api_url = "https://flask-api-regulatory-7f5479effcc5.herokuapp.com/predict"
+                try:
+                    res = requests.post(api_url, json=data)
+                    response_data = res.json()
+                    st.subheader("Prediction Results")
+                    
+                    # Display results
+                    for result in response_data:
+                        risk_classification = result['Predicted_Risk_Classification']
+                        if risk_classification == 'Low':
+                            st.success(f"Predicted Risk Classification: {risk_classification}")
+                        elif risk_classification == 'Moderate':
+                            st.warning(f"Predicted Risk Classification: {risk_classification}")
+                        else:
+                            st.error(f"Predicted Risk Classification: {risk_classification}")
+                        
+                        st.markdown(f"**Application Result:** {result['Application_Result']}")
+                        with st.expander("Show Explanation"):
+                            st.write(f"Explanation: {result['Explanation']}")
+                        st.write("---")
+                except Exception as e:
+                    st.error(f"Error occurred: {e}")
+            st.markdown('</div>', unsafe_allow_html=True)
