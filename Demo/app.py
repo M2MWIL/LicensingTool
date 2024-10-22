@@ -316,19 +316,16 @@ elif selected == "Licensing Module":
         # Custom CSS for styling the borders and the container
         st.markdown("""
         <style>
-            .custom-container {
-                padding: 20px;
+            .stMarkdown > div {
+                background-color: #f9f9f9;
                 border: 2px solid #ccc;
                 border-radius: 15px;
+                padding: 20px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                background-color: #f9f9f9;
                 margin-bottom: 20px;
             }
-            .centered {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
+            .stButton {
+                text-align: center;
             }
         </style>
         """, unsafe_allow_html=True)
@@ -338,8 +335,10 @@ elif selected == "Licensing Module":
 
         # Left column: Input Fields
         with col1:
-            st.markdown('<div class="custom-container centered">', unsafe_allow_html=True)
-            st.header("Input Fields")
+            st.markdown("#### Input Fields")
+            st.markdown("""
+            <div>
+            """, unsafe_allow_html=True)
             
             # Collect input data from user
             input_data = {
@@ -378,8 +377,10 @@ elif selected == "Licensing Module":
 
         # Right column: Prediction results
         with col2:
-            st.markdown('<div class="custom-container centered">', unsafe_allow_html=True)
-            st.header("Prediction Results")
+            st.markdown("#### Prediction Results")
+            st.markdown("""
+            <div>
+            """, unsafe_allow_html=True)
             
             if st.button('Predict'):
                 data = {
