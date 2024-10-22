@@ -327,9 +327,16 @@ elif selected == "Licensing Module":
                 response_data = res.json()
                 st.subheader("Prediction Results")
                 for result in response_data:
-                    st.write(f"Predicted Risk Classification: {result['Predicted_Risk_Classification']}")
-                    st.write(f"Application Result: {result['Application_Result']}")
-                    st.write(f"Explanation: {result['Explanation']}")
+                    risk_classification  = result['Predicted_Risk_Classification']
+                    if risk_classification == 'Low':
+                        st.success(f"Predicted Risk Classification: {risk_classification}")
+                    elif risk_classification == 'Moderate':
+                        st.warning(f"Predicted Risk Classification: {risk_classification}")
+                    else:
+                        st.error(f"Predicited Risk Classification: {risk_classification}")
+                    st.markdown(f"**Application Result:** {result['Application_Result']}")
+                    with st.expander("Show Explanation"):
+                        st.write(f"Explanation: {result['Explanation']}")
                     st.write("---")
             except Exception as e:
                 st.error(f"Error occurred: {e}")
