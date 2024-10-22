@@ -284,6 +284,13 @@ elif selected == "Licensing Module":
                 border-radius: 15px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 background-color: #f9f9f9;
+                margin-bottom: 20px;
+            }
+            .centered {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
             }
         </style>
         """, unsafe_allow_html=True)
@@ -294,7 +301,7 @@ elif selected == "Licensing Module":
         # Collect input data from user
         with col1:
             with st.container():
-                st.markdown('<div class="custom-container">', unsafe_allow_html=True)
+                st.markdown('<div class="custom-container centered">', unsafe_allow_html=True)
                 st.header("Input Fields")
                 input_data = {
                     'Applicant_Type': st.selectbox('Applicant Type', ['Individual', 'Company', 'Partnership']),
@@ -336,7 +343,7 @@ elif selected == "Licensing Module":
         # Prediction
         with col2:
             with st.container():
-                st.markdown('<div class="custom-container">', unsafe_allow_html=True)
+                st.markdown('<div class="custom-container centered">', unsafe_allow_html=True)
                 st.header("Prediction Results")
                 if st.button('Predict'):
                     data = {
