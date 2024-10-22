@@ -314,31 +314,15 @@ elif selected == "Licensing Module":
         st.title("Licensing Risk Prediction")
         
         # Custom CSS for styling the borders and the container
-        st.markdown("""
-        <style>
-            .stMarkdown > div {
-                background-color: #f9f9f9;
-                border: 2px solid #ccc;
-                border-radius: 15px;
-                padding: 20px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                margin-bottom: 20px;
-            }
-            .stButton {
-                text-align: center;
-            }
-        </style>
-        """, unsafe_allow_html=True)
+       
         
         # Create columns with 1:3 ratio
         col1, col2 = st.columns([1, 3])
 
         # Left column: Input Fields
         with col1:
-            st.markdown("#### Input Fields")
-            st.markdown("""
-            <div>
-            """, unsafe_allow_html=True)
+            
+            st.header("Input Fields")
             
             # Collect input data from user
             input_data = {
@@ -373,14 +357,12 @@ elif selected == "Licensing Module":
                 'Fire_Safety_Certificate': st.selectbox('Fire Safety Certificate', ['Valid', 'Expired']),
                 'Municipal_Approval': st.selectbox('Municipal Approval', ['Approved', 'Pending'])
             }
-            st.markdown('</div>', unsafe_allow_html=True)
+            
 
         # Right column: Prediction results
         with col2:
-            st.markdown("#### Prediction Results")
-            st.markdown("""
-            <div>
-            """, unsafe_allow_html=True)
+            
+            st.header("Prediction Results")
             
             if st.button('Predict'):
                 data = {
@@ -408,4 +390,4 @@ elif selected == "Licensing Module":
                         st.write("---")
                 except Exception as e:
                     st.error(f"Error occurred: {e}")
-            st.markdown('</div>', unsafe_allow_html=True)
+            
