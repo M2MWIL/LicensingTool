@@ -7,38 +7,28 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pickle
 import os
-from data_processing import DataProcessor  # Import DataProcessor from data_processing.py
-from models import ModelHandler  # Import ModelHandler from models.py
-#from llm import LLMHandler  # Import LLMHandler from llm.py
 from streamlit_option_menu import option_menu
 import requests
 
 
 #################### Load Data #######################
 
+
 df = pd.read_csv('Demo/AGCOdataset.csv')
 
 map_data= pd.read_csv('Demo/map.csv')
 
+# Initialize flagged applications DataFrame with the same columns as `df`
+if 'flagged_df' not in st.session_state:
+    st.session_state['flagged_df'] = pd.DataFrame()  # Empty DataFrame as a placeholder
+
 # Convert 'Application_Date' to datetime format, handling errors
 df['Application_Date'] = pd.to_datetime(df['Application_Date'], errors='coerce')
 
+# Reference the DataFrame from session state
+
 # Remove any rows where 'Application_Date' could not be converted
 df = df.dropna(subset=['Application_Date'])
-
-#################### Load Model #######################
-# with open('rf_model.pkl', 'rb') as file:
-# Set the path to the random forest model
-model_path = os.path.join(os.path.dirname(__file__), 'models/random_forest_model.pickle')
-
-# Initialize model handler and load the model
-model_handler = ModelHandler()
-model_handler.load_model(model_path)
-#llm_handler = LLMHandler()
-
-
-# Initialize data processor
-data_processor = DataProcessor()
 
 #################### Streamlit Layout #######################
 
@@ -65,7 +55,7 @@ with st.sidebar:
         "Main Menu", 
         ["Home", "Licensing Module"], 
         icons=["house", "gear"],  # Icons for the items
-        menu_icon="cast", 
+        menu_icon="select", 
         default_index=0
     )
 
@@ -95,14 +85,14 @@ elif selected == "Licensing Module":
     with st.sidebar:
         section = option_menu(
             "Options", 
-            ["Dashboard", "Licensing Decision Predictor"],
-            icons=["bar-chart", "activity"],  # You can replace these with relevant icons
-            menu_icon="list", 
+            ["Dashboard", "Licensing Application List", "Decision Predictor" ],
+            icons=["bar-chart", "list", "activity"],  # You can replace these with relevant icons
+            menu_icon="select", 
             default_index=0
         )
     # Display a greeting message and today's date
-    st.write(f"Date: {today}")
-    st.title(f"{greeting}, Welcome to the Licensing Module!")
+    st.write(f"Date: {today} ")
+    st.write(f"{greeting}, Welcome to the Licensing Module!")
 
     if section == "Dashboard":
 
@@ -311,12 +301,11 @@ elif selected == "Licensing Module":
             fig_volume = px.line(volume_trends, x='Year_Month', y='Count', color='Is_Renewal', title='Application Volume Trends (New vs. Renewal)')
             st.plotly_chart(fig_volume, use_container_width=True)
         
-        st.header("Licensing Application Directory")
-        st.dataframe(df)  
+
 
  #################### Licensing Decision Predictor #######################
 
-    elif section == "Licensing Decision Predictor":
+    elif section == "Decision Predictor":
         st.title("Licensing Risk Prediction")
         
         # Custom CSS for styling the borders and the container
@@ -396,4 +385,79 @@ elif selected == "Licensing Module":
                         st.write("---")
                 except Exception as e:
                     st.error(f"Error occurred: {e}")
-            
+
+ #################### Drill down functionality #######################
+
+    elif section == "Licensing Application List":
+        st.title("Licensing Application List")
+
+        if df.empty:
+            st.warning("No data available to display.")
+        else:
+            st.write("### Application Directory")
+
+        # Display the dataframe
+        st.dataframe(df)
+
+        # Simulate row selection: Allow the user to select an application by `Application_ID`
+        selected_row = st.selectbox("Select Application by ID:", df['Application_ID'])
+
+        # Store the selected entity in session state
+        st.session_state['selected_entity'] = selected_row
+
+        # Display the selected row's details in an expander
+        if st.session_state.get('selected_entity'):
+            selected_data = df[df['Application_ID'] == st.session_state['selected_entity']].iloc[0]
+
+            with st.expander(f"Details for Application ID {st.session_state['selected_entity']}", expanded=True):
+                col1, col2 = st.columns(2)
+
+                # Column 1: General details
+                with col1:
+                    st.write(f"**Applicant Type**: {selected_data['Applicant_Type']}")
+                    st.write(f"**Business Address**: {selected_data['Business_Address']}")
+                    st.write(f"**Seating Capacity**: {selected_data['Seating_Capacity']}")
+                    st.write(f"**Previous Licenses Held**: {selected_data['Previous_Licenses_Held']}")
+                    st.write(f"**Compliance History**: {selected_data['Compliance_History']}")
+                    st.write(f"**Premises Ownership**: {selected_data['Premises_Ownership']}")
+
+                # Column 2: Other details, including docs with icons
+                with col2:
+                    st.write(f"**Is Renewal**: {selected_data['Is_Renewal']}")
+                    st.write(f"**Risk Classification**: {selected_data['Risk_Classification']}")
+                    st.write(f"**Fire Safety Certificate**: {selected_data['Fire_Safety_Certificate']} 🔗 [Open](#)")
+                    st.write(f"**Municipal Approval**: {selected_data['Municipal_Approval']} 🔗 [Open](#)")
+                    st.write(f"**Business Longevity**: {selected_data['Business_Longevity']}")
+                    st.write(f"**Application Date**: {selected_data['Application_Date']}")
+
+                # Licensing Decision and Flag Decision in the same row
+                decision_col1, decision_col2 = st.columns([1, 3])
+
+                with decision_col1:
+                    st.write(f"**Licensing Decision**: {selected_data['Licensing_Decision']}")
+
+                with decision_col2:  
+                    # Action button: Flag Decision
+                    if st.button("Flag Decision"):
+                        # Append the entire row (all columns) to the flagged DataFrame
+                        st.session_state['flagged_df'] = pd.concat([st.session_state['flagged_df'], pd.DataFrame([selected_data])], ignore_index=True)
+                        st.success(f"Application {selected_data['Application_ID']} flagged.")
+
+                # Change decision option
+                new_decision = st.selectbox("Change Decision", ['Approved', 'Conditional Approval', 'Rejected'], key="decision_change")
+
+                if st.button("Submit Change"):
+                    # Update the decision in the DataFrame
+                    df.loc[df['Application_ID'] == selected_row, 'Licensing_Decision'] = new_decision
+                    
+                    # Store the updated DataFrame back into session state
+                    st.session_state['df'] = df
+
+                    # Print the updated licensing decision
+                    updated_decision = df.loc[df['Application_ID'] == selected_row, 'Licensing_Decision'].values[0]
+                    st.success(f"Decision for Application {selected_row} changed to {new_decision}.")
+                    st.write(f"**Updated Licensing Decision:** {updated_decision}")
+
+            # Display flagged applications
+            st.write("### Flagged Applications")
+            st.dataframe(st.session_state['flagged_df'])
