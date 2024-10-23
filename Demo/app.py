@@ -120,7 +120,8 @@ elif selected == "Licensing Module":
         # Create columns layout (3 columns for better organization)
         col1, col2, col3 = st.columns([2, 3, 1])
 
-        # Application Status Overview (col1)
+ 
+ #################### Application Status Overview (col1) ####################### 
         with col1:
             st.subheader("Licensing Decision Overview")
             # Group by Licensing Decision
@@ -130,7 +131,7 @@ elif selected == "Licensing Module":
                                 title='Licensing Decision Distribution')
             st.plotly_chart(fig_licensing, use_container_width=True)
 
-        # Risk Classification Distribution (col2)
+#################### Risk Classification Distribution (col2) ####################### 
         with col2:
             st.write("#### Risk Category Distribution")
 
@@ -159,8 +160,9 @@ elif selected == "Licensing Module":
             # Display the bubble chart
             st.plotly_chart(fig_risk_bubble, use_container_width=True)
 
-        
-        # New vs Renewal
+
+#################### New vs Renewal #######################        
+
         with col3:
             st.write("#### New vs Renewal")
 
@@ -214,7 +216,9 @@ elif selected == "Licensing Module":
         stacked_fig = px.bar(stacked_data, x='Premises_Type', y='Counts', color='Licensing_Decision',
                                 title='Licensing Decision by Premises Type', barmode='stack')
         st.plotly_chart(stacked_fig)
-        
+
+
+#################### Feature Importance ####################### 
         st.write("#### Feature Importance")
         # Data
         datafi = {
@@ -232,14 +236,14 @@ elif selected == "Licensing Module":
         }
 
         # Create DataFrame
-        df = pd.DataFrame(datafi)
+        df1 = pd.DataFrame(datafi)
 
         # Waterfall chart using Plotly
         fig = go.Figure(go.Waterfall(
             name = "Feature Importance",
             orientation = "v",
-            x = df['Feature'],
-            y = df['Importance'],
+            x = df1['Feature'],
+            y = df1['Importance'],
             decreasing = {"marker":{"color":"red"}},
             increasing = {"marker":{"color":"green"}},
             totals = {"marker":{"color":"blue"}}
@@ -254,10 +258,11 @@ elif selected == "Licensing Module":
 
         # Display the chart in Streamlit
         st.plotly_chart(fig)
-        col8, col9 = st.columns(2)
-        
-        # Location Hotspot: Risk by Region (col4)
-        with col8:
+        col4, col5 = st.columns(2)
+
+#################### Location Map: By Risk Col 4 ####################### 
+
+        with col4:
             st.write("#### Map Location")
             # Rename latitude and longitude columns
             map_data.rename(columns={'Latitude': 'lat', 'Longitude': 'lon'}, inplace=True)
@@ -287,9 +292,8 @@ elif selected == "Licensing Module":
             # Display the map in Streamlit
             st.plotly_chart(fig)
             
-        
-        # Application Volume Trends (col5)
-        with col9:
+#################### Application Volume Trends (col5) #######################       
+        with col5:
             # Ensure 'Application_Date' is in datetime format
             df['Application_Date'] = pd.to_datetime(df['Application_Date'], errors='coerce')
 
@@ -309,7 +313,9 @@ elif selected == "Licensing Module":
         
         st.header("Licensing Application Directory")
         st.dataframe(df)  
-        
+
+ #################### Licensing Decision Predictor #######################
+
     elif section == "Licensing Decision Predictor":
         st.title("Licensing Risk Prediction")
         
