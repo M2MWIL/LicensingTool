@@ -396,28 +396,38 @@ elif selected == "Licensing Module":
                             features.append(features[0])
                             importances.append(importances[0])
 
+                            colors = [
+                                '#FF6347', '#4682B4', '#32CD32', '#FFD700', '#6A5ACD', 
+                                '#FF4500', '#1E90FF', '#228B22', '#FFA07A', '#8A2BE2', 
+                                '#FF1493', '#ADFF2F', '#FF69B4', '#20B2AA'
+                            ]
                             # Create the radar chart using Plotly
                             fig = go.Figure()
 
-                            # Add the trace for the radar chart
-                            fig.add_trace(go.Scatterpolar(
-                                r=importances,  # Importances as the radius
-                                theta=features,  # Features as the axes
-                                fill='toself',   # Fill the area of the radar chart
-                                name='Feature Importance',
-                                mode='markers+lines'
-                            ))
+                            for i, feature in enumerate(features[:-1]):  # Exclude the last one (the duplicate to close the loop)
+                                fig.add_trace(go.Scatterpolar(
+                                    r=[0, importances[i], 0],  # Value for the current feature
+                                    theta=[features[i], features[i], features[i]],  # Label the current feature
+                                    fill='toself',  # Fill area under the feature
+                                    name=feature,
+                                    line=dict(color=colors[i % len(colors)]),  # Cycle through colors if more than 14
+                                    marker=dict(size=8)
+                                ))
 
+                            max_importance = np.max(importances)
                             # Customize the layout of the radar chart
                             fig.update_layout(
                                 title='Feature Importance as Spider Chart',
                                 polar=dict(
                                     radialaxis=dict(
                                         visible=True,
-                                        range=[0, 1],  # Set the range from 0 to 1 (based on importance values)
-                                    )
+                                        range=[0, max_importance],  # Set dynamic range based on the maximum value
+                                    ),
+                                    angularaxis=dict(
+                                        tickfont=dict(size=12),  # Adjust size of the angular axis labels (feature names)
+                                    ),
                                 ),
-                                showlegend=False,  # Disable the legend since there is only one trace
+                                showlegend=True,  # Enable the legend to show each feature's color
                                 height=600,
                                 width=600
                             )
