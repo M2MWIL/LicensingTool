@@ -11,7 +11,12 @@ class LLMHandler():
         if not self.api_key:
             raise ValueError("OpenAI API key not found. Make sure it's set in the environment.")
         self.model= ChatOpenAI(model="gpt-4o-mini", openai_api_key=self.api_key)
+        
+    def get_licensing_process(self):
+        with open('data/licensing_process.txt', 'r') as file:
+            return file.read()
     def generate_explanation(self, decision_path, prediction, data):
+        licensing_process = self.get_licensing_process()
         prompt = f"""
         You are a alcohol licensing representitive at a company. A machine learning model has come up with the following tree path
         to predict risk about the following enterprise(s). 
@@ -95,9 +100,10 @@ class LLMHandler():
         - {data}
         Explain why the Random Forest model predicted the risk classification of '{prediction}' for this sample. With reference to what you see
         in the raw table entry
+        Refer back to this document outlining the risk based licensing process: {licensing_process}
         Please explain why this classification is appropriate or inapropriate based on the provided data.
         If the risk classification is 'Moderate', the application will be a conditional approval. Please explain in detail what conditions the 
-        applicant must follow with their conditional approval
+        applicant must follow with their conditional approval only if the risk based classification is 'Moderate' not  'Low' or 'High'.
 
         """
         response = self.model.invoke(prompt)

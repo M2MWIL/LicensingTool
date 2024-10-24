@@ -52,7 +52,7 @@ def predict():
 
         # Extract decision paths for each prediction
         decision_paths = rf_model.apply(df_test_filtered)
-
+        feature_importances = rf_model.feature_importances_
         # Store the results
         results = []
         trees = rf_model.estimators_
@@ -78,7 +78,8 @@ def predict():
                 "Application_Result": application_result,
                 "Predicted_Risk_Classification": pred,
                 "Decision_Path": decision_path,
-                "Explanation": explanation
+                "Explanation": explanation,
+                "Feature_Importance": feature_importances
             })
 
         return jsonify(results), 200
