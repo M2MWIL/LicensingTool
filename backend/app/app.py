@@ -74,12 +74,15 @@ def predict():
             else:
                 application_result = 'Rejected'
 
+            importance_dict = {
+                feature: round(importance, 4) for feature, importance in zip(rf_model.feature_names_in_, feature_importances)
+            }
             results.append({
                 "Application_Result": application_result,
                 "Predicted_Risk_Classification": pred,
                 "Decision_Path": decision_path,
                 "Explanation": explanation,
-                "Feature_Importance": feature_importances
+                "Feature_Importance": importance_dict
             })
 
         return jsonify(results), 200

@@ -12,6 +12,7 @@ class LLMHandler():
             raise ValueError("OpenAI API key not found. Make sure it's set in the environment.")
         self.model= ChatOpenAI(model="gpt-4o-mini", openai_api_key=self.api_key)
         
+    
     def get_licensing_process(self):
         with open('data/licensing_process.txt', 'r') as file:
             return file.read()
