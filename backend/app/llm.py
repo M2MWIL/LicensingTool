@@ -100,7 +100,7 @@ class LLMHandler():
         Here is also the raw table entry without the encodings:
         - {data}
         Explain why the Random Forest model predicted the risk classification of '{prediction}' for this sample. With reference to what you see
-        in the raw table entry
+        in the raw table entry. Refrain from being technical in the explanation (dont mention weights and other technical terms). 
         Refer back to this document outlining the risk based licensing process: {licensing_process}
         Please explain why this classification is appropriate or inapropriate based on the provided data.
         If the risk classification is 'Moderate', the application will be a conditional approval. Please explain in detail what conditions the 

@@ -393,11 +393,30 @@ elif selected == "Licensing Module":
                             importances = list(feature_importance.values())
 
                             # Create a bar chart using matplotlib
-                            fig, ax = plt.subplots()
-                            ax.barh(features, importances, color='skyblue')
-                            ax.set_xlabel('Importance')
-                            ax.set_title('Feature Importance')
-                            st.pyplot(fig)  
+                            labels = np.array(features)
+                            values = np.array(importances)
+                            num_vars = len(labels)
+
+                            # Compute angle for each feature
+                            angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+
+                            # The plot is circular, so we need to "complete the loop"
+                            values = np.concatenate((values, [values[0]]))
+                            angles += [angles[0]]
+
+                            # Create the figure
+                            fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+
+                            # Plot the radar chart
+                            ax.fill(angles, values, color='skyblue', alpha=0.4)
+                            ax.plot(angles, values, color='blue', linewidth=2)
+
+                            # Fix the feature labels
+                            ax.set_xticks(angles[:-1])
+                            ax.set_xticklabels(labels)
+
+                            # Show the spider chart
+                            st.pyplot(fig) 
                             st.write("---")
                     except Exception as e:
                         st.error(f"Error occurred: {e}")
