@@ -393,11 +393,37 @@ elif selected == "Licensing Module":
                             importances = list(feature_importance.values())
 
                             # Create a bar chart using matplotlib
-                            fig, ax = plt.subplots()
-                            ax.barh(features, importances, color='skyblue')
-                            ax.set_xlabel('Importance')
-                            ax.set_title('Feature Importance')
-                            st.pyplot(fig)  
+                            features.append(features[0])
+                            importances.append(importances[0])
+
+                            # Create the radar chart using Plotly
+                            fig = go.Figure()
+
+                            # Add the trace for the radar chart
+                            fig.add_trace(go.Scatterpolar(
+                                r=importances,  # Importances as the radius
+                                theta=features,  # Features as the axes
+                                fill='toself',   # Fill the area of the radar chart
+                                name='Feature Importance',
+                                mode='markers+lines'
+                            ))
+
+                            # Customize the layout of the radar chart
+                            fig.update_layout(
+                                title='Feature Importance as Spider Chart',
+                                polar=dict(
+                                    radialaxis=dict(
+                                        visible=True,
+                                        range=[0, 1],  # Set the range from 0 to 1 (based on importance values)
+                                    )
+                                ),
+                                showlegend=False,  # Disable the legend since there is only one trace
+                                height=600,
+                                width=600
+                            )
+
+                            # Display the radar chart in Streamlit
+                            st.plotly_chart(fig)
                             st.write("---")
                     except Exception as e:
                         st.error(f"Error occurred: {e}")
