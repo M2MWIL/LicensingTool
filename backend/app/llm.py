@@ -104,8 +104,8 @@ class LLMHandler():
         Refer back to this document outlining the risk based licensing process: {licensing_process}
         Please explain why this classification is appropriate or inapropriate based on the provided data.
         If the risk classification is 'Moderate', the application will be a conditional approval. Please explain in detail what conditions the 
-        applicant must follow with their conditional approval only if the risk based classification is 'Moderate' not  'Low' or 'High'.
-
+        applicant must follow with their conditional approval.
+        If the risk classification is 'Low' or 'High' there is no need to explain anything about a conditional approval.
         """
         response = self.model.invoke(prompt)
         

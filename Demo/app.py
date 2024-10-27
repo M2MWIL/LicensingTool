@@ -421,7 +421,7 @@ elif selected == "Licensing Module":
                                 polar=dict(
                                     radialaxis=dict(
                                         visible=True,
-                                        range=[0, max_importance],  # Set dynamic range based on the maximum value
+                                        range=[0, max_importance + 4],  # Set dynamic range based on the maximum value
                                     ),
                                     angularaxis=dict(
                                         tickfont=dict(size=12),  # Adjust size of the angular axis labels (feature names)

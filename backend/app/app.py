@@ -90,5 +90,26 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
+@app.route('/importance', methods=['POST'])
+def importance():
+    try:
+        results = []
+        input_data = request.json
+        test_data = pd.DataFrame(input_data['features'])
+        df_test_filtered = test_data[rf_model.feature_names_in_]
+        df_test_filtered = processor.apply_weights(df_test_filtered)
+        df_test_filtered = processor.encode_columns(df_test_filtered)
+        y_test_pred = rf_model.predict(df_test_filtered)
+        feature_importances = rf_model.feature_importances_
+        importance_dict = {
+                feature: round(importance, 4) for feature, importance in zip(rf_model.feature_names_in_, feature_importances)
+            }
+        results.append({
+            "Feature_Importance": importance_dict
+        })
+        return jsonify(results), 200
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 400
+
 if __name__ == '__main__':
     app.run(debug=True)
