@@ -411,7 +411,7 @@ elif selected == "Licensing Module":
                                     fill='toself',  # Fill area under the feature
                                     name=feature,
                                     line=dict(color=colors[i % len(colors)]),  # Cycle through colors if more than 14
-                                    marker=dict(size=8)
+                                    marker=dict(size=5)
                                 ))
 
                             max_importance = np.max(importances)
@@ -427,7 +427,7 @@ elif selected == "Licensing Module":
                                         tickfont=dict(size=12),  # Adjust size of the angular axis labels (feature names)
                                     ),
                                 ),
-                                showlegend=False,  # Enable the legend to show each feature's color
+                                showlegend=True,  # Enable the legend to show each feature's color
                                 height=600,
                                 width=600
                             )
