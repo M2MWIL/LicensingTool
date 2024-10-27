@@ -427,9 +427,9 @@ elif selected == "Licensing Module":
                                         tickfont=dict(size=12),  # Adjust size of the angular axis labels (feature names)
                                     ),
                                 ),
-                                showlegend=True,  # Enable the legend to show each feature's color
+                                showlegend=False,  # Enable the legend to show each feature's color
                                 height=600,
-                                width=400
+                                width=600
                             )
 
                             # Display the radar chart in Streamlit
