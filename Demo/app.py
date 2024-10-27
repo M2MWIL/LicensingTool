@@ -429,7 +429,7 @@ elif selected == "Licensing Module":
                                 ),
                                 showlegend=True,  # Enable the legend to show each feature's color
                                 height=600,
-                                width=800
+                                width=1000
                             )
 
                             # Display the radar chart in Streamlit
