@@ -74,6 +74,7 @@ if selected == "Home":
     <p>The Licensing Module in this tool is designed to help regulators with the licensing decision process.</p>
     <ul>
         <li><b>Dashboard</b>: Use the dashboard to view high-level metrics and insights related to the licensing process. This section provides an overview of trends and statistics that can help in monitoring and decision-making.</li>
+        <li><b>Licensing Application List</b>: View a comprehensive list of all licensing applications. This section allows you to explore individual applications, review details of each entity, flag items for follow-up, and make or adjust decisions as needed.</li>
         <li><b>Licensing Decision Predictor</b>: Use this section to predict the outcome of licensing decisions. You can input various data points to get a prediction, and view the reasoning analysis done by the LLM (Large Language Model) to understand the basis for the decision. Additionally, you can see recommendations based on the predicted results, which can assist in making informed regulatory decisions.</li>
     </ul>
     </div>
