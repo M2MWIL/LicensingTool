@@ -104,9 +104,33 @@ elif selected == "Licensing Module":
         #premises_types = st.sidebar.multiselect("Select Premises Type", df['Premises_Type'].unique(), default=df['Premises_Type'].unique())
         #applicant_types = st.sidebar.multiselect("Select Applicant Type", df['Applicant_Type'].unique(), default=df['Applicant_Type'].unique())
         risk_class = st.sidebar.multiselect("Select Risk Classification", df['Risk_Classification'].unique(), default=df['Risk_Classification'].unique())
-
+        licensing_decision = st.sidebar.multiselect("Licensing Decision", df['Licensing_Decision'].unique())
+        renewal_status = st.sidebar.radio("Renewal Status", options=["All", "New", "Renewal"])
+        premises_type = st.sidebar.multiselect("Premises Type", df['Premises_Type'].unique())
+        compliance_history = st.sidebar.selectbox("Compliance History", options=["All", "Compliant", "Non-Compliant", "Unknown"])
         # Apply filters
         df_filtered = df[df['Risk_Classification'].isin(risk_class)]
+        
+        if licensing_decision:
+            df_filtered = df_filtered[df_filtered['Licensing_Decision'].isin(licensing_decision)]
+
+        if renewal_status == "New":
+            df_filtered = df_filtered[df_filtered['Is_Renewal'] == "No"]
+        elif renewal_status == "Renewal":
+            df_filtered = df_filtered[df_filtered['Is_Renewal'] == "Yes"]
+
+        if premises_type:
+            df_filtered = df_filtered[df_filtered['Premises_Type'].isin(premises_type)]
+
+        if compliance_history and compliance_history != "All":
+            df_filtered = df_filtered[df_filtered['Compliance_History'] == compliance_history]
+
+        # Calculate counts
+        total_count = df.shape[0]  # Total number of records
+        filtered_count = df_filtered.shape[0]  # Number of records after filtering
+
+        # Display the count in Streamlit
+        st.sidebar.write(f"Displaying {filtered_count} out of {total_count} entities")
 
         # Create columns layout (3 columns for better organization)
         col1, col2, col3 = st.columns([2, 3, 1])
