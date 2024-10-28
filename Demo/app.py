@@ -279,34 +279,46 @@ elif selected == "Licensing Module":
 
         with col4:
             st.write("#### Map Location")
-            # Rename latitude and longitude columns
-            map_data.rename(columns={'Latitude': 'lat', 'Longitude': 'lon'}, inplace=True)
+            color_map = {}
+            if "High" in risk_class:
+                color_map["High"] = "red"
+            if "Moderate" in risk_class:
+                color_map["Moderate"] = "orange"
+            if "Low" in risk_class:
+                color_map["Low"] = "green"
 
-            # Randomly assign colors to each point
-            colors = np.random.choice(['red', 'orange', 'green'], size=len(map_data))
-            map_data['color'] = colors
+            # Assign colors to points based on risk classification selection
+            # Create a list of colors based on filter pane selections
+            colors = [color for risk, color in color_map.items()]
 
-            # Create the map using Plotly with random colors and custom markers
-            fig = px.scatter_mapbox(map_data, 
-                                    lat='lat', 
-                                    lon='lon', 
-                                    hover_name='Business_Name',  # Column to display on hover
-                                    hover_data={'Business_Address': True},  # Additional details to display on hover
-                                    color='color',  # Color by the 'color' column
-                                    color_discrete_map={'red': 'red', 'orange': 'orange', 'green': 'green'},  # Force specific colors
-                                    zoom=10, 
-                                    height=500)
+            # Rename latitude and longitude columns in map_data (if not already done)
+            if 'Latitude' in map_data.columns and 'Longitude' in map_data.columns:
+                map_data.rename(columns={'Latitude': 'lat', 'Longitude': 'lon'}, inplace=True)
 
-            # Update the layout to use custom markers/icons
-            fig.update_traces(marker=dict(size=18, symbol='circle'),  # Set the size and symbol of the markers
-                            selector=dict(mode='markers'))
+            # Add a dummy column in map_data for color based on risk classifications
+            map_data['color'] = np.random.choice(colors, size=len(map_data))
 
-            # Set the mapbox style
+            # Create the map with selected colors
+            fig = px.scatter_mapbox(
+                map_data, 
+                lat='lat', 
+                lon='lon', 
+                hover_name='Business_Name',  # Adjust column name based on map_data structure
+                hover_data={'Business_Address': True},
+                color='color',  
+                color_discrete_map={'red': 'red', 'orange': 'orange', 'green': 'green'},  # Color options based on filter
+                zoom=10, 
+                height=500
+            )
+
+            # Update the layout for custom marker size and style
+            fig.update_traces(marker=dict(size=18, symbol='circle'), selector=dict(mode='markers'))
             fig.update_layout(mapbox_style="open-street-map")
 
             # Display the map in Streamlit
             st.plotly_chart(fig)
-            
+          
+           
 #################### Application Volume Trends (col5) #######################       
         with col5:
             # Ensure 'Application_Date' is in datetime format
