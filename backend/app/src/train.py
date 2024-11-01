@@ -1,6 +1,6 @@
 import pandas as pd
-from data_processing import DataProcessor
-from models import ModelHandler
+from backend.app.src.data_processing import DataProcessor
+from backend.app.src.models import ModelHandler
 
 def main():
     # Load your dataset

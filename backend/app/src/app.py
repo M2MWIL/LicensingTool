@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 import pandas as pd
 import pickle
-from llm import LLMHandler
+from backend.app.src.llm import LLMHandler
 import os
-from data_processing import DataProcessor
+from backend.app.src.data_processing import DataProcessor
 
 with open('models/random_forest_model.pickle', 'rb') as model_file:
     rf_model = pickle.load(model_file)

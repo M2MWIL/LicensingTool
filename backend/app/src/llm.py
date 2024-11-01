@@ -3,7 +3,7 @@ from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 import os
 from langchain_core.output_parsers import StrOutputParser
-from config import Config 
+from backend.app.src.config import Config 
 
 class LLMHandler():
     def __init__(self):
