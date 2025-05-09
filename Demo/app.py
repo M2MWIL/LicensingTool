@@ -396,9 +396,13 @@ elif selected == "Licensing Module":
         with col2:
             
             st.header("Prediction Results")
-            with st.container():
+
+            # Instructional helper text
+            st.caption("Click to analyze inputs and classify risk level of the licensing application.")
+
             
-                if st.button('Predict'):
+            with st.container():
+                if st.button('Predict Licensing Risk'):
                     data = {
                         "features": [input_data]  # Send as a list of dictionaries
                     }
@@ -474,8 +478,9 @@ elif selected == "Licensing Module":
                             st.write("---")
                     except Exception as e:
                         st.error(f"Error occurred: {e}")
-            
-
+            # Show info before button is clicked
+                elif 'response_data' not in st.session_state:
+                    st.info("Prediction results will appear here after analysis.")
                 
 
  #################### Drill down functionality #######################
