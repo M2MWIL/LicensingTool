@@ -359,6 +359,7 @@ elif selected == "Licensing Module":
             with st.container():
             # Collect input data from user
                 input_data = {
+                    'Business_Name': st.text_input('Business Name'),
                     'Applicant_Type': st.selectbox('Applicant Type', ['Individual', 'Company', 'Partnership']),
                     'Area_Type': st.selectbox('Area Type', ['Urban', 'Rural']),
                     'Premises_Ownership': st.selectbox('Premises Ownership', ['Owned', 'Rented']),
